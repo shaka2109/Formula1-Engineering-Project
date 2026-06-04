@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "5"
+# ///
 # MAGIC %run ../01.Miscellaneous/Env_configuration
 
 # COMMAND ----------
@@ -29,7 +33,6 @@ myschema = StructType([StructField('driverId', StringType(), True),
 
 # DBTITLE 1,Leer archivo de Landing
 drivers_df = read_json_file(source_file,myschema)
-drivers_df.printSchema()
 
 # COMMAND ----------
 
@@ -43,4 +46,4 @@ write_file(drivers_final_df, table_path)
 # COMMAND ----------
 
 # DBTITLE 1,Revisar tabla bronze
-display(spark.table(table_path))
+# display(spark.table(table_path))

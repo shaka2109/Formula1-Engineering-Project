@@ -1,10 +1,4 @@
 -- Databricks notebook source
-SELECT *
-FROM formula_1.gold.dim_constructors
-LIMIT 2
-
--- COMMAND ----------
-
 CREATE OR REPLACE VIEW formula_1.gold.vw_constructor_standing AS
 WITH driver_session_summary AS 
 (

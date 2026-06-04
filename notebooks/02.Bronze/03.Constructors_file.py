@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "5"
+# ///
 # MAGIC %run ../01.Miscellaneous/Env_configuration
 
 # COMMAND ----------
@@ -20,7 +24,6 @@ myschema = 'constructorId STRING, name STRING, nationality STRING, url STRING'
 
 # DBTITLE 1,Leer archivo de Landing
 constructores_df = read_json_file(source_file,myschema)
-constructores_df.printSchema()
 
 # COMMAND ----------
 
@@ -34,4 +37,4 @@ write_file(constructores_final_df, table_path)
 # COMMAND ----------
 
 # DBTITLE 1,Revisar tabla bronze
-display(spark.table(table_path))
+# display(spark.table(table_path))

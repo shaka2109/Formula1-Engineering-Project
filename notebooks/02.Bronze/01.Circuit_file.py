@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "5"
+# ///
 # MAGIC %run ../01.Miscellaneous/Env_configuration
 
 # COMMAND ----------
@@ -28,7 +32,6 @@ myschema = StructType([StructField('circuitId', StringType(), True),
 
 # DBTITLE 1,Leer archivo de Landing
 circuits_df = read_csv_file(source_file,myschema)
-circuits_df.printSchema()
 
 # COMMAND ----------
 
@@ -43,4 +46,4 @@ write_file(circuits_final_df, table_path)
 # COMMAND ----------
 
 # DBTITLE 1,Revisar tabla bronze
-display(spark.table(table_path))
+# display(spark.table(table_path))
