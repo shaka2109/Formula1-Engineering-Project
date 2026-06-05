@@ -1,24 +1,30 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "5"
+# ///
 # MAGIC %run ../01_Miscellaneous/Env_configuration
 
 # COMMAND ----------
 
-# MAGIC %md
-# MAGIC Se crea una tabla que ayude al analisis geografico (ref_nationality_region) para constructores y drivers.
+# MAGIC %run ../01_Miscellaneous/Support_functions
 
 # COMMAND ----------
 
-from pyspark.sql import functions as F
+dbutils.widgets.text('p_batch_id','')
+v_batch_id = dbutils.widgets.get('p_batch_id')
 
 # COMMAND ----------
 
+join_key='driver_id'
 table_path = f'{catalog_name}.{gold_schema}.dim_drivers'
 
 # COMMAND ----------
 
 # DBTITLE 1,Tabla 1
-df_drivers = spark.read.table(f'{catalog_name}.{silver_schema}.drivers')
-df_nationality = spark.read.table(f'{catalog_name}.{gold_schema}.ref_nationality_region')
+df_drivers = (spark.read.table(f'{catalog_name}.{silver_schema}.drivers')
+                            .filter(F.col('batch_id')==v_batch_id))
+df_nationality = spark.read.table(f'{catalog_name}.{gold_schema}.ref_nationality')
 
 # COMMAND ----------
 
@@ -34,6 +40,4 @@ df_dim_drivers = (df_drivers.join(df_nationality, df_drivers.nationality == df_n
 
 # COMMAND ----------
 
-(df_dim_drivers.write.format('delta')
-             .mode('overwrite')
-             .saveAsTable(table_path))
+write_to_gold(df_dim_drivers, table_path, join_key)

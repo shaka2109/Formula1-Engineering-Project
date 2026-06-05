@@ -11,8 +11,13 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text('p_batch_id', '')
+v_batch_id = dbutils.widgets.get('p_batch_id')
+
+# COMMAND ----------
+
 table_name = 'results'
-source_file = f'{landing_folder_path}{table_name}/'
+source_file = f'{landing_folder_path}{v_batch_id}/{table_name}/'
 table_path = f'{catalog_name}.{bronze_schema}.{table_name}'
 
 
@@ -48,7 +53,7 @@ results_final_df = add_ingestion_metadata(results_df)
 # COMMAND ----------
 
 # DBTITLE 1,Escribir como Delta en Bronze
-write_file(results_final_df, table_path)
+write_delta(results_final_df, table_path, v_batch_id)
 
 # COMMAND ----------
 

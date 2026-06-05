@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "5"
+# ///
 # MAGIC %run ../01_Miscellaneous/Env_configuration
 
 # COMMAND ----------
@@ -7,15 +11,21 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text('p_batch_id','')
+v_batch_id = dbutils.widgets.get('p_batch_id')
+
+# COMMAND ----------
+
 # DBTITLE 1,Dinamico
 table_name = 'drivers'
+join_key = "driver_id"
 source_table = f'{catalog_name}.{bronze_schema}.{table_name}'
 table_path = f'{catalog_name}.{silver_schema}.{table_name}'
 
 # COMMAND ----------
 
 # DBTITLE 1,Leer tabla delta como dataframe
-df = spark.read.table(source_table)
+df = spark.read.table(source_table).filter(F.col('batch_id')==v_batch_id)
 
 # COMMAND ----------
 
@@ -32,14 +42,13 @@ df_drivers = (df.dropDuplicates()
                             F.col('dateOfBirth').alias('date_of_birth'),
                             F.col('nationality'),
                             F.col('Ingestion_timestamp').alias('ingestion_timestamp'),
-                            F.col('Source_file').alias('source_file')))
+                            F.col('Source_file').alias('source_file'),
+                            F.col('batch_id')))
 
 # COMMAND ----------
 
 # DBTITLE 1,Escribir df en silver
-(df_drivers.write.format('delta')
-             .mode('overwrite')
-             .saveAsTable(table_path))
+write_to_silver(df_drivers, table_path, join_key)
 
 # COMMAND ----------
 

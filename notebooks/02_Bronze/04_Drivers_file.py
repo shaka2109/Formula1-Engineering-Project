@@ -11,8 +11,13 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text('p_batch_id', '')
+v_batch_id = dbutils.widgets.get('p_batch_id')
+
+# COMMAND ----------
+
 table_name = 'drivers'
-source_file = f'{landing_folder_path}{table_name}.json'
+source_file = f'{landing_folder_path}{v_batch_id}/{table_name}.json'
 table_path = f'{catalog_name}.{bronze_schema}.{table_name}'
 
 # COMMAND ----------
@@ -41,7 +46,7 @@ drivers_final_df = add_ingestion_metadata(drivers_df)
 # COMMAND ----------
 
 # DBTITLE 1,Escribir como Delta en Bronze
-write_file(drivers_final_df, table_path)
+write_delta(drivers_final_df, table_path, v_batch_id)
 
 # COMMAND ----------
 

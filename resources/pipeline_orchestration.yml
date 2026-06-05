@@ -1,0 +1,52 @@
+resources:
+  jobs:
+    formula1_pipeline_orchestration:
+
+      name: Formula1 Pipeline Orchestration
+
+      tasks:
+
+        - task_key: Identify_next_batch
+          notebook_task:
+            notebook_path: ../notebooks/05_Orchestration/01_Identify_next_batch.py
+
+        - task_key: Has_New_Batch
+          depends_on:
+            - task_key: Identify_next_batch
+          condition_task:
+            op: EQUAL_TO
+            left: "{{tasks.Identify_next_batch.values.has_batch}}"
+            right: "True"
+
+        - task_key: Create_New_Batch
+          depends_on:
+            - task_key: Has_New_Batch
+              outcome: "true"
+          notebook_task:
+            notebook_path: ../notebooks/05_Orchestration/02_Create_new_batch.py
+            base_parameters:
+              p_batch_id: "{{tasks.Identify_next_batch.values.p_batch_id}}"
+
+        - task_key: Run_Formula1_Pipeline
+          depends_on:
+            - task_key: Create_New_Batch
+          run_job_task:
+            job_id: ${resources.jobs.formula1_full_pipeline.id}
+            job_parameters:
+              p_batch_id: "{{tasks.Identify_next_batch.values.p_batch_id}}"
+
+        - task_key: Complete_Batch
+          depends_on:
+            - task_key: Run_Formula1_Pipeline
+          notebook_task:
+            notebook_path: ../notebooks/05_Orchestration/03_Complete_batch.py
+            base_parameters:
+              p_batch_id: "{{tasks.Identify_next_batch.values.p_batch_id}}"
+
+        - task_key: Control_Table
+          depends_on:
+            - task_key: Complete_Batch
+          notebook_task:
+            notebook_path: ../notebooks/05_Orchestration/00_Control_table.py
+
+

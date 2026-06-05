@@ -3,6 +3,9 @@ resources:
     formula1_full_pipeline:
 
       name: Formula1 Full Pipeline
+      parameters:
+        - name: p_batch_id
+          default: ""
 
       tasks:
 
@@ -83,7 +86,7 @@ resources:
 
         - task_key: 02_dimConstructors
           depends_on:
-            - task_key: 03_Constructors_file
+            - task_key: 03_Transform_constructors
             - task_key: Ref_nationality
           notebook_task:
             notebook_path: ../notebooks/04_Gold/02_dimConstructors.py

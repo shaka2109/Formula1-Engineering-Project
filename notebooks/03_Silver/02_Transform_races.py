@@ -11,15 +11,21 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text('p_batch_id','')
+v_batch_id = dbutils.widgets.get('p_batch_id')
+
+# COMMAND ----------
+
 # DBTITLE 1,Dinamico
 table_name = 'races'
+join_key = 'race_date'
 source_table = f'{catalog_name}.{bronze_schema}.{table_name}'
 table_path = f'{catalog_name}.{silver_schema}.{table_name}'
 
 # COMMAND ----------
 
 # DBTITLE 1,Leer tabla delta como dataframe
-df = spark.read.table(source_table)
+df = spark.read.table(source_table).filter(F.col('batch_id')==v_batch_id)
 
 # COMMAND ----------
 
@@ -35,11 +41,10 @@ df_races = (df.dropDuplicates()
                             F.col('date').alias('race_date'),
                             F.col('circuitId').alias('circuit_id'),
                             F.col('Ingestion_timestamp').alias('ingestion_timestamp'),
-                            F.col('Source_file').alias('source_file')))
+                            F.col('Source_file').alias('source_file'),
+                            F.col('batch_id')))
 
 # COMMAND ----------
 
 # DBTITLE 1,Escribir df en silver
-(df_races.write.format('delta')
-             .mode('overwrite')
-             .saveAsTable(table_path))
+write_to_silver(df_races, table_path, join_key)

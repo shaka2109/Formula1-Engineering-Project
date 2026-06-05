@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "5"
+# ///
 # MAGIC %run ../01_Miscellaneous/Env_configuration
 
 # COMMAND ----------
@@ -7,7 +11,7 @@ from pyspark.sql import Row
 
 # COMMAND ----------
 
-table_path = f'{catalog_name}.{gold_schema}.ref_nationality_region'
+table_path = f'{catalog_name}.{gold_schema}.ref_nationality'
 
 # COMMAND ----------
 
@@ -72,14 +76,14 @@ nationality_region_map_rows = [
 
 # COMMAND ----------
 
-ref_nationality_region_df = spark.createDataFrame(nationality_region_map_rows)
+ref_nationality_df = spark.createDataFrame(nationality_region_map_rows)
 
 # COMMAND ----------
 
-(ref_nationality_region_df.write.format("delta")
+(ref_nationality_df.write.format("delta")
                                 .mode("overwrite")             
                                 .saveAsTable(table_path))
 
 # COMMAND ----------
 
-display(spark.table(table_path))
+# display(spark.table(table_path))

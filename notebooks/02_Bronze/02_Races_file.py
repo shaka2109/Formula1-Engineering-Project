@@ -11,9 +11,14 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text('p_batch_id', '')
+v_batch_id = dbutils.widgets.get('p_batch_id')
+
+# COMMAND ----------
+
 # DBTITLE 1,Dinamico
 table_name = 'races'
-source_file = f'{landing_folder_path}{table_name}.csv'
+source_file = f'{landing_folder_path}{v_batch_id}/{table_name}.csv'
 table_path = f'{catalog_name}.{bronze_schema}.{table_name}'
 
 # COMMAND ----------
@@ -40,7 +45,7 @@ races_final_df = add_ingestion_metadata(races_df)
 # COMMAND ----------
 
 # DBTITLE 1,Escribir como Delta en Bronze
-write_file(races_final_df, table_path)
+write_delta(races_final_df, table_path, v_batch_id)
 
 # COMMAND ----------
 
