@@ -17,7 +17,7 @@ This project implements an end-to-end Data Engineering solution for Formula 1 ra
 
 ## Business Scenario
 
-Formula 1 race data is delivered monthly as folders containing multiple datasets.
+Formula 1 race data is delivered the next day after a weekend race as folders containing multiple datasets.
 
 ### Data Sources
 
