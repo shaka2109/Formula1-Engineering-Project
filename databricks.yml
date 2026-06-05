@@ -1,0 +1,20 @@
+bundle:
+  name: Formula1
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://dbc-a1dee497-4a72.cloud.databricks.com
+    presets:
+      name_prefix: "[DEV] "
+
+  prod:
+    workspace:
+      host: https://dbc-a1dee497-4a72.cloud.databricks.com
+    presets:
+      name_prefix: "[PROD] "
+
