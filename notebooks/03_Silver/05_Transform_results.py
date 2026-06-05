@@ -1,14 +1,14 @@
 # Databricks notebook source
-# MAGIC %run ../01.Miscellaneous/Env_configuration
+# MAGIC %run ../01_Miscellaneous/Env_configuration
 
 # COMMAND ----------
 
-# MAGIC %run ../01.Miscellaneous/Support_functions
+# MAGIC %run ../01_Miscellaneous/Support_functions
 
 # COMMAND ----------
 
 # DBTITLE 1,Dinamico
-table_name = 'sprints'
+table_name = 'results'
 source_table = f'{catalog_name}.{bronze_schema}.{table_name}'
 table_path = f'{catalog_name}.{silver_schema}.{table_name}'
 
@@ -29,7 +29,7 @@ df_results = ((df.filter(df.season.isNotNull()
                 .dropDuplicates(['season', 'round', 'constructorId', 'driverId'])
                 .withColumn("raceName", F.initcap("raceName"))
                 .select(
-                            F.col('date').alias('sprint_date'),
+                            F.col('date').alias('race_date'),
                             F.col('raceName').alias('race_name'),
                             F.col('round'),
                             F.col('season'),

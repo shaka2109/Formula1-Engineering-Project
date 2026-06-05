@@ -2,102 +2,102 @@ resources:
   jobs:
     formula1_full_pipeline:
 
-      name: Formula1 Bronze Load
+      name: Formula1 Full Pipeline
 
       tasks:
 
-        - task_key: 01.Circuit_file
+        - task_key: 01_Circuit_file
           notebook_task:
-            notebook_path: ../notebooks/bronze/01.Circuit_file.py
+            notebook_path: ../notebooks/02_Bronze/01_Circuit_file.py
 
-        - task_key: 02.Races_file
+        - task_key: 02_Races_file
           notebook_task:
-            notebook_path: ../notebooks/bronze/02.Races_file.py
+            notebook_path: ../notebooks/02_Bronze/02_Races_file.py
 
-        - task_key: 03.Constructors_file
+        - task_key: 03_Constructors_file
           notebook_task:
-            notebook_path: ../notebooks/bronze/03.Constructors_file.py
+            notebook_path: ../notebooks/02_Bronze/03_Constructors_file.py
 
-        - task_key: 04.Drivers_file
+        - task_key: 04_Drivers_file
           notebook_task:
-            notebook_path: ../notebooks/bronze/04.Drivers_file.py
+            notebook_path: ../notebooks/02_Bronze/04_Drivers_file.py
 
-        - task_key: 05.Results_file
+        - task_key: 05_Results_file
           notebook_task:
-            notebook_path: ../notebooks/bronze/05.Results_file.py
+            notebook_path: ../notebooks/02_Bronze/05_Results_file.py
 
-        - task_key: 06.Sprints_file
+        - task_key: 06_Sprints_file
           notebook_task:
-            notebook_path: ../notebooks/bronze/06.Sprints_file.py
+            notebook_path: ../notebooks/02_Bronze/06_Sprints_file.py
 
        # silver notebooks
 
-        - task_key: 01.Transform_circuits
+        - task_key: 01_Transform_circuits
           depends_on:
-            - task_key: 01.Circuit_file
+            - task_key: 01_Circuit_file
           notebook_task:
-            notebook_path: ../notebooks/silver/01.Transform_circuits.py
+            notebook_path: ../notebooks/03_Silver/01_Transform_circuits.py
 
-        - task_key: 02.Transform_races
+        - task_key: 02_Transform_races
           depends_on:
-            - task_key: 02.Races_file
+            - task_key: 02_Races_file
           notebook_task:
-            notebook_path: ../notebooks/silver/02.Transform_races.py
+            notebook_path: ../notebooks/03_Silver/02_Transform_races.py
 
-        - task_key: 03.Transform_constructors
+        - task_key: 03_Transform_constructors
           depends_on:
-            - task_key: 03.Constructors_file
+            - task_key: 03_Constructors_file
           notebook_task:
-            notebook_path: ../notebooks/silver/03.Transform_constructors.py
+            notebook_path: ../notebooks/03_Silver/03_Transform_constructors.py
 
-        - task_key: 04.Transform_drivers
+        - task_key: 04_Transform_drivers
           depends_on:
-            - task_key: 04.Drivers_file
+            - task_key: 04_Drivers_file
           notebook_task:
-            notebook_path: ../notebooks/silver/04.Transform_drivers.py
+            notebook_path: ../notebooks/03_Silver/04_Transform_drivers.py
 
-        - task_key: 05.Transform_results
+        - task_key: 05_Transform_results
           depends_on:
-            - task_key: 05.Results_file
+            - task_key: 05_Results_file
           notebook_task:
-            notebook_path: ../notebooks/silver/05.Transform_results.py
+            notebook_path: ../notebooks/03_Silver/05_Transform_results.py
 
-        - task_key: 06.Transform_sprints
+        - task_key: 06_Transform_sprints
           depends_on:
-            - task_key: 06.Sprints_file
+            - task_key: 06_Sprints_file
           notebook_task:
-            notebook_path: ../notebooks/silver/06.Transform_sprints.py
+            notebook_path: ../notebooks/03_Silver/06_Transform_sprints.py
         
+        # gold notebooks
+
         - task_key: Ref_nationality
           notebook_task:
-            notebook_path: ../notebooks/gold/Ref_nationality.py
+            notebook_path: ../notebooks/04_Gold/Ref_nationality.py
 
-       # gold notebooks
-
-        - task_key: 01.dimRaces
+        - task_key: 01_dimRaces
           depends_on:
-            - task_key: 01.Transform_circuits
-            - task_key: 02.Transform_races
+            - task_key: 01_Transform_circuits
+            - task_key: 02_Transform_races
           notebook_task:
-            notebook_path: ../notebooks/gold/01.dimRaces.py
+            notebook_path: ../notebooks/04_Gold/01_dimRaces.py
 
-        - task_key: 02.dimConstructors
+        - task_key: 02_dimConstructors
           depends_on:
-            - task_key: 03.Constructors_file
+            - task_key: 03_Constructors_file
             - task_key: Ref_nationality
           notebook_task:
-            notebook_path: ../notebooks/gold/02.dimConstructors.py
+            notebook_path: ../notebooks/04_Gold/02_dimConstructors.py
 
-        - task_key: 03.dimDrivers
+        - task_key: 03_dimDrivers
           depends_on:
-            - task_key: 04.Transform_drivers
+            - task_key: 04_Transform_drivers
             - task_key: Ref_nationality
           notebook_task:
-            notebook_path: ../notebooks/gold/03.dimDrivers.py
+            notebook_path: ../notebooks/04_Gold/03_dimDrivers.py
 
-        - task_key: 04.factResults
+        - task_key: 04_factResults
           depends_on:
-            - task_key: 05.Transform_results
-            - task_key: 06.Transform_sprints
+            - task_key: 05_Transform_results
+            - task_key: 06_Transform_sprints
           notebook_task:
-            notebook_path: ../notebooks/gold/04.factResults.py
+            notebook_path: ../notebooks/04_Gold/04_factResults.py

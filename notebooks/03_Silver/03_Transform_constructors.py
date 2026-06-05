@@ -1,9 +1,9 @@
 # Databricks notebook source
-# MAGIC %run ../01.Miscellaneous/Env_configuration
+# MAGIC %run ../01_Miscellaneous/Env_configuration
 
 # COMMAND ----------
 
-# MAGIC %run ../01.Miscellaneous/Support_functions
+# MAGIC %run ../01_Miscellaneous/Support_functions
 
 # COMMAND ----------
 

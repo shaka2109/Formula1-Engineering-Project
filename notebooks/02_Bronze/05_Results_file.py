@@ -3,15 +3,15 @@
 # [tool.databricks.environment]
 # environment_version = "5"
 # ///
-# MAGIC %run ../01.Miscellaneous/Env_configuration
+# MAGIC %run ../01_Miscellaneous/Env_configuration
 
 # COMMAND ----------
 
-# MAGIC %run ../01.Miscellaneous/Support_functions
+# MAGIC %run ../01_Miscellaneous/Support_functions
 
 # COMMAND ----------
 
-table_name = 'sprints'
+table_name = 'results'
 source_file = f'{landing_folder_path}{table_name}/'
 table_path = f'{catalog_name}.{bronze_schema}.{table_name}'
 
@@ -39,16 +39,16 @@ myschema = StructType([StructField('date', DateType(), True),
 # COMMAND ----------
 
 # DBTITLE 1,Leer archivo de Landing
-sprints_df = read_json_multiline_file(source_file,myschema)
+results_df = read_json_file(source_file,myschema)
 
 # COMMAND ----------
 
-sprints_final_df = add_ingestion_metadata(sprints_df)
+results_final_df = add_ingestion_metadata(results_df)
 
 # COMMAND ----------
 
 # DBTITLE 1,Escribir como Delta en Bronze
-write_file(sprints_final_df, table_path)
+write_file(results_final_df, table_path)
 
 # COMMAND ----------
 
