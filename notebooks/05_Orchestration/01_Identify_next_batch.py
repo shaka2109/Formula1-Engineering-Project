@@ -35,13 +35,12 @@ if spark.catalog.tableExists(control_table):
 else:
     tracked_batches = []                   
 
-
 new_batches = sorted(list(set(landing_batches) - set(tracked_batches)))    
-next_batch = new_batches[0] if new_batches else None                      
+next_batch = new_batches[0] if new_batches else None
 
 print(f"Landing batches     : {landing_batches}")                          
 print(f"Tracked batches     : {tracked_batches}")
-print(f"Next batch to process: {next_batch}")
+print(f"Next batch to load: {new_batches}")
 
 if next_batch is None:                                                  
     dbutils.jobs.taskValues.set(key="p_batch_id", value="")             
