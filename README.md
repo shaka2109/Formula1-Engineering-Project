@@ -6,14 +6,17 @@ This project implements an end-to-end Data Engineering solution for Formula 1 ra
 
 - Incremental processing framework
 - Medallion Architecture
-- Azure Data Lake Storage Gen2
-- Unity Catalog & External Locations
+- Delta Lake processing
+- Azure Data Lake integration
+- Unity Catalog governance
+- External Locations
 - Mixed-format ingestion (CSV, JSON, Multiline JSON)
 - Nested folder processing
-- Automated batch orchestration
+- Workflow orchestration
 - Databricks Workflows
 - Databricks Asset Bundles (DABs)
-- GitHub Actions CI/CD
+- GitHub Actions CI/CD automation
+- Multi-environment deployment
 
 ## Business Scenario
 
@@ -76,10 +79,10 @@ Features:
 - Multiline JSON ingestion
 - Recursive folder reading
 - Incremental batch processing
--	Apply correct schema
--	Add audit columns
--	Store data in delta format
--	Starting with full load, but extending with incremental load
+- Apply correct schema
+- Add audit columns
+- Store data in delta format
+- Starting with full load, but extending with incremental load
 
 ### Silver Layer
 
@@ -116,26 +119,24 @@ To facilitate data exploration and reporting, analytical views were created on t
 
 Gold-layer views were used to build analytical dashboards in Databricks.
 
-Key metrics:
+#### Driver standings
+<img src="dashboards/Drivers_standings.png" width="1200">
 
-- Driver standings
+#### Constructor standings
+<img src="dashboards/Constructors_standings.png" width="1200">
 
+#### Dominant drivers accross time
+<img src="dashboards/Dominant_drivers.png" width="1200">
 
-- Constructor standings
-
-
-- Dominant drivers accross time
-
-
-- Dominant teams accross time
-
+#### Dominant teams accross time
+<img src="dashboards/Dominant_constructors.png" width="1200">
 
 
 ## Incremental Batch Processing
 
 The project implements a custom batch-control framework.
 
-Each monthly folder after 2025-1 represents a unique batch since 2025-01 keeps historical data as well:
+Each folder after 2025-1 represents a unique batch since 2025-01 keeps historical data as well:
 ```text
     2025-01
     2025-02
@@ -222,8 +223,8 @@ Responsible for processing and transforming Formula 1 datasets through the Medal
           ↓
     Control Batch
 ```
-
 Responsible for managing incremental execution and batch lifecycle control.
+- Future enhancement: Implement Databricks For Each Tasks to process multiple pending batches in a single orchestration run.
 
 ## CI/CD Implementation
 
@@ -265,22 +266,7 @@ Automated validations:
           └── workflows/
               └── databricks-cicd.yml
 ```
-
-## Key Features
-
-- Incremental batch ingestion
-- Medallion Architecture
-- Delta Lake processing
-- Azure Data Lake integration
-- Unity Catalog governance
-- External Locations
-- Workflow orchestration
-- Databricks Asset Bundles
-- CI/CD automation
-- Multi-environment deployment
-
-- -Future enhancement: Implement Databricks For Each Tasks to process multiple pending batches in a single orchestration run.
-
+  
 ## Results
 
 The solution successfully demonstrates:
