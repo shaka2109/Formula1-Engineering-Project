@@ -42,7 +42,7 @@ Examples:
       │   └── ...
 ```
 
-The ingestion framework dynamically handles each file format and applies the appropriate parsing strategy before loading the data into the Bronze layer. As new monthly folders arrive, the system must:
+The ingestion framework dynamically handles each file format and applies the appropriate parsing strategy before loading the data into the Bronze layer. As new folders arrive, the system must:
 
 - Detect new batches.
 - Avoid reprocessing historical data.
@@ -104,6 +104,32 @@ Features:
 -	Analise dominant drivers and teams
 -	Support recent and historical analysis
 -	Optimised for reporting and analytical queries
+
+### Analytics Layer
+
+To facilitate data exploration and reporting, analytical views were created on top of the Gold layer. These views expose business-ready datasets optimized for SQL analysis and dashboarding within Databricks.
+
+- Championship standings
+- Historical points trends
+
+## Dashboarding
+
+Gold-layer views were used to build analytical dashboards in Databricks.
+
+Key metrics:
+
+- Driver standings
+
+
+- Constructor standings
+
+
+- Dominant drivers accross time
+
+
+- Dominant teams accross time
+
+
 
 ## Incremental Batch Processing
 
@@ -227,6 +253,9 @@ Automated validations:
       │   ├── Silver/
       │   ├── Gold/
       │   └── Orchestration/
+      │   └── Analytics/
+      │ 
+      ├── dashboards/
       │
       ├── resources/
       │   ├── formula1_full_pipeline.yml
@@ -249,6 +278,8 @@ Automated validations:
 - Databricks Asset Bundles
 - CI/CD automation
 - Multi-environment deployment
+
+- -Future enhancement: Implement Databricks For Each Tasks to process multiple pending batches in a single orchestration run.
 
 ## Results
 
