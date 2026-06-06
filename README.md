@@ -6,18 +6,21 @@ This project implements an end-to-end Data Engineering solution for Formula 1 ra
 
 - Incremental processing framework
 - Medallion Architecture
-- Azure Data Lake Storage Gen2
-- Unity Catalog & External Locations
+- Delta Lake processing
+- Azure Data Lake integration
+- Unity Catalog governance
+- External Locations
 - Mixed-format ingestion (CSV, JSON, Multiline JSON)
 - Nested folder processing
-- Automated batch orchestration
+- Workflow orchestration
 - Databricks Workflows
 - Databricks Asset Bundles (DABs)
-- GitHub Actions CI/CD
+- GitHub Actions CI/CD automation
+- Multi-environment deployment
 
 ## Business Scenario
 
-Formula 1 race data is delivered monthly as folders containing multiple datasets.
+Formula 1 race data is delivered the next day after a weekend race as folders containing multiple datasets.
 
 ### Data Sources
 
@@ -42,7 +45,7 @@ Examples:
       │   └── ...
 ```
 
-The ingestion framework dynamically handles each file format and applies the appropriate parsing strategy before loading the data into the Bronze layer. As new monthly folders arrive, the system must:
+The ingestion framework dynamically handles each file format and applies the appropriate parsing strategy before loading the data into the Bronze layer. As new folders arrive, the system must:
 
 - Detect new batches.
 - Avoid reprocessing historical data.
@@ -76,10 +79,10 @@ Features:
 - Multiline JSON ingestion
 - Recursive folder reading
 - Incremental batch processing
--	Apply correct schema
--	Add audit columns
--	Store data in delta format
--	Starting with full load, but extending with incremental load
+- Apply correct schema
+- Add audit columns
+- Store data in delta format
+- Starting with full load, but extending with incremental load
 
 ### Silver Layer
 
@@ -105,11 +108,35 @@ Features:
 -	Support recent and historical analysis
 -	Optimised for reporting and analytical queries
 
+### Analytics Layer
+
+To facilitate data exploration and reporting, analytical views were created on top of the Gold layer. These views expose business-ready datasets optimized for SQL analysis and dashboarding within Databricks.
+
+- Championship standings
+- Historical points trends
+
+## Dashboarding
+
+Gold-layer views were used to build analytical dashboards in Databricks.
+
+#### Driver standings
+<img src="dashboards/Drivers_standings.png" width="1200">
+
+#### Constructor standings
+<img src="dashboards/Constructors_standings.png" width="1200">
+
+#### Dominant drivers accross time
+<img src="dashboards/Dominant_drivers.png" width="1200">
+
+#### Dominant teams accross time
+<img src="dashboards/Dominant_constructors.png" width="1200">
+
+
 ## Incremental Batch Processing
 
 The project implements a custom batch-control framework.
 
-Each monthly folder after 2025-1 represents a unique batch since 2025-01 keeps historical data as well:
+Each folder after 2025-1 represents a unique batch since 2025-01 keeps historical data as well:
 ```text
     2025-01
     2025-02
@@ -196,8 +223,8 @@ Responsible for processing and transforming Formula 1 datasets through the Medal
           ↓
     Control Batch
 ```
-
 Responsible for managing incremental execution and batch lifecycle control.
+- Future enhancement: Implement Databricks For Each Tasks to process multiple pending batches in a single orchestration run.
 
 ## CI/CD Implementation
 
@@ -227,6 +254,9 @@ Automated validations:
       │   ├── Silver/
       │   ├── Gold/
       │   └── Orchestration/
+      │   └── Analytics/
+      │ 
+      ├── dashboards/
       │
       ├── resources/
       │   ├── formula1_full_pipeline.yml
@@ -236,20 +266,7 @@ Automated validations:
           └── workflows/
               └── databricks-cicd.yml
 ```
-
-## Key Features
-
-- Incremental batch ingestion
-- Medallion Architecture
-- Delta Lake processing
-- Azure Data Lake integration
-- Unity Catalog governance
-- External Locations
-- Workflow orchestration
-- Databricks Asset Bundles
-- CI/CD automation
-- Multi-environment deployment
-
+  
 ## Results
 
 The solution successfully demonstrates:
